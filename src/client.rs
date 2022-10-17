@@ -1,4 +1,5 @@
 use crate::error::Error;
+use crate::global::GetGlobalRequest;
 use crate::tickers::{GetHistoricalTicksRequest, GetTickerRequest, GetTickersRequest};
 use reqwest::{ClientBuilder, RequestBuilder, StatusCode};
 use std::time::Duration;
@@ -66,6 +67,10 @@ impl Client {
             response: response?,
             request,
         })
+    }
+
+    pub fn global(&self) -> GetGlobalRequest {
+        GetGlobalRequest::new(self)
     }
 
     pub fn tickers(&self) -> GetTickersRequest {
