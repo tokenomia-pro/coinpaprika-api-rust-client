@@ -1,4 +1,4 @@
-use crate::coins::{GetCoinRequest, GetCoinsRequest};
+use crate::coins::{GetCoinRequest, GetCoinsRequest, GetTwitterRequest};
 use crate::error::Error;
 use crate::global::GetGlobalRequest;
 use crate::tickers::{GetHistoricalTicksRequest, GetTickerRequest, GetTickersRequest};
@@ -83,6 +83,10 @@ impl Client {
 
     pub fn coin(&self, coin_id: &str) -> GetCoinRequest {
         GetCoinRequest::new(self, coin_id)
+    }
+
+    pub fn twitter(&self, coin_id: &str) -> GetTwitterRequest {
+        GetTwitterRequest::new(self, coin_id)
     }
 
     //

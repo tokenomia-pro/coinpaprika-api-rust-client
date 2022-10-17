@@ -88,6 +88,21 @@ pub struct CoinDetails {
     pub last_data_at: String,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Tweet {
+    date: String,
+    user_name: String,
+    user_image_link: String,
+    status: String,
+    is_retweet: bool,
+    retweet_count: i32,
+    like_count: i32,
+    status_link: String,
+    status_id: String,
+    media_link: Option<String>,
+    youtube_link: Option<String>,
+}
+
 pub struct GetCoinsRequest<'a> {
     client: &'a Client,
 }
@@ -133,6 +148,33 @@ impl<'a> GetCoinRequest<'a> {
         let response: Response = self.client.request(request).await?;
 
         let data: CoinDetails = response.response.json().await?;
+
+        Ok(data)
+    }
+}
+
+pub struct GetTwitterRequest<'a> {
+    client: &'a Client,
+    coin_id: String,
+}
+
+impl<'a> GetTwitterRequest<'a> {
+    pub fn new(client: &'a Client, coin_id: &str) -> Self {
+        Self {
+            client,
+            coin_id: String::from(coin_id),
+        }
+    }
+
+    pub async fn send(&self) -> Result<Vec<Tweet>, Error> {
+        let request: reqwest::RequestBuilder = self.client.client.get(format!(
+            "{}/coins/{}/twitter",
+            self.client.api_url, self.coin_id
+        ));
+
+        let response: Response = self.client.request(request).await?;
+
+        let data: Vec<Tweet> = response.response.json().await?;
 
         Ok(data)
     }
