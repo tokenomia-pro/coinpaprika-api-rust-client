@@ -1,5 +1,5 @@
 use coinpaprika_api::client::Client;
-use coinpaprika_api::coins::{Coin, CoinDetails, CoinEvent, Tweet};
+use coinpaprika_api::coins::{Coin, CoinDetails, CoinEvent, CoinExchange, Tweet};
 use std::error::Error;
 
 #[tokio::main]
@@ -41,6 +41,19 @@ async fn main() -> Result<(), Box<dyn Error>> {
     println!(
         "first 3 coin events: {:#?}",
         coin_events.iter().take(3).collect::<Vec<&CoinEvent>>()
+    );
+
+    //
+    // Get coin exchanges by coin_id.
+    //
+    let coin_exchanges: Vec<CoinExchange> = client.coin_exchanges("btc-bitcoin").send().await?;
+
+    println!(
+        "first 3 coin exchanges: {:#?}",
+        coin_exchanges
+            .iter()
+            .take(3)
+            .collect::<Vec<&CoinExchange>>()
     );
 
     Ok(())

@@ -115,6 +115,20 @@ pub struct CoinEvent {
     proof_image_link: Option<String>,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Fiat {
+    name: String,
+    symbol: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CoinExchange {
+    id: String,
+    name: String,
+    fiats: Vec<Fiat>,
+    adjusted_volume_24h_share: f64,
+}
+
 pub struct GetCoinsRequest<'a> {
     client: &'a Client,
 }
@@ -214,6 +228,33 @@ impl<'a> GetCoinEventsRequest<'a> {
         let response: Response = self.client.request(request).await?;
 
         let data: Vec<CoinEvent> = response.response.json().await?;
+
+        Ok(data)
+    }
+}
+
+pub struct GetCoinExchangesRequest<'a> {
+    client: &'a Client,
+    coin_id: String,
+}
+
+impl<'a> GetCoinExchangesRequest<'a> {
+    pub fn new(client: &'a Client, coin_id: &str) -> Self {
+        Self {
+            client,
+            coin_id: String::from(coin_id),
+        }
+    }
+
+    pub async fn send(&self) -> Result<Vec<CoinExchange>, Error> {
+        let request: reqwest::RequestBuilder = self.client.client.get(format!(
+            "{}/coins/{}/exchanges",
+            self.client.api_url, self.coin_id
+        ));
+
+        let response: Response = self.client.request(request).await?;
+
+        let data: Vec<CoinExchange> = response.response.json().await?;
 
         Ok(data)
     }
