@@ -6,25 +6,25 @@ use serde_json::Value;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Ticker {
-    id: String,
-    name: String,
-    symbol: String,
-    rank: isize,
-    circulating_supply: i64,
-    total_supply: i64,
-    max_supply: i64,
-    beta_value: f64,
-    first_data_at: String,
-    last_updated: String,
-    quotes: Value,
+    pub id: String,
+    pub name: String,
+    pub symbol: String,
+    pub rank: isize,
+    pub circulating_supply: i64,
+    pub total_supply: i64,
+    pub max_supply: i64,
+    pub beta_value: f64,
+    pub first_data_at: String,
+    pub last_updated: String,
+    pub quotes: Value,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct HistoricalTick {
-    timestamp: String,
-    price: f64,
-    volume_24h: i64,
-    market_cap: i64,
+    pub timestamp: String,
+    pub price: f64,
+    pub volume_24h: i64,
+    pub market_cap: i64,
 }
 
 pub struct GetTickersRequest<'a> {

@@ -8,11 +8,8 @@ static DEFAULT_USER_AGENT: &str = "coinpaprika-api-rust-client";
 static API_URL: &str = "https://api.coinpaprika.com/v1/";
 
 #[derive(Debug)]
-/// Response and request context for API call.
 pub struct Response {
-    /// HTTP response.
     pub response: reqwest::Response,
-    /// HTTP request that resulted in this response.
     pub request: reqwest::Request,
 }
 
