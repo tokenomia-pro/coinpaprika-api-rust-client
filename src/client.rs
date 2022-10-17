@@ -1,5 +1,5 @@
 use crate::error::Error;
-use crate::tickers::GetTickersRequest;
+use crate::tickers::{GetTickerRequest, GetTickersRequest};
 use reqwest::{ClientBuilder, RequestBuilder, StatusCode};
 use std::time::Duration;
 
@@ -70,6 +70,10 @@ impl Client {
 
     pub fn tickers(&self) -> GetTickersRequest {
         GetTickersRequest::new(self)
+    }
+
+    pub fn ticker(&self, coin_id: &str) -> GetTickerRequest {
+        GetTickerRequest::new(self, coin_id)
     }
 }
 
