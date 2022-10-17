@@ -85,8 +85,11 @@ impl std::fmt::Display for Error {
             Error::ApiConnectionError => {
                 write!(f, "Fail to connect to API.")
             }
-            Error::Reqwest(_) | Error::Json(_) => {
-                write!(f, "{}", self)
+            Error::Reqwest(err) => {
+                write!(f, "{}", err)
+            }
+            Error::Json(err) => {
+                write!(f, "{}", err)
             }
         }
     }
