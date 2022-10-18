@@ -5,6 +5,7 @@ use crate::coins::{
 };
 use crate::error::Error;
 use crate::global::GetGlobalRequest;
+use crate::key::GetKeyInfoRequest;
 use crate::tickers::{GetHistoricalTicksRequest, GetTickerRequest, GetTickersRequest};
 use reqwest::{ClientBuilder, RequestBuilder, StatusCode};
 use std::time::Duration;
@@ -69,6 +70,13 @@ impl Client {
             response: response?,
             request,
         })
+    }
+
+    //
+    // Key
+    //
+    pub fn key_info(&self) -> GetKeyInfoRequest {
+        GetKeyInfoRequest::new(self)
     }
 
     //
