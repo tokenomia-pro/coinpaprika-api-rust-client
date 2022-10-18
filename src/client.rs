@@ -1,6 +1,6 @@
 use crate::coins::{
-    GetCoinEventsRequest, GetCoinExchangesRequest, GetCoinMarketsRequest, GetCoinRequest,
-    GetCoinsRequest, GetTwitterRequest,
+    GetCoinEventsRequest, GetCoinExchangesRequest, GetCoinMarketsRequest,
+    GetCoinOHLCLastFullDayRequest, GetCoinRequest, GetCoinsRequest, GetTwitterRequest,
 };
 use crate::error::Error;
 use crate::global::GetGlobalRequest;
@@ -102,6 +102,10 @@ impl Client {
 
     pub fn coin_markets(&self, coin_id: &str) -> GetCoinMarketsRequest {
         GetCoinMarketsRequest::new(self, coin_id)
+    }
+
+    pub fn coin_ohlc_last_full_day(&self, coin_id: &str) -> GetCoinOHLCLastFullDayRequest {
+        GetCoinOHLCLastFullDayRequest::new(self, coin_id)
     }
 
     //

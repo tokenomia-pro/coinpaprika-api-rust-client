@@ -147,6 +147,18 @@ pub struct CoinMarket {
     pub last_updated: String,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CoinOHLC {
+    pub time_open: String,
+    pub time_close: String,
+    pub open: f64,
+    pub high: f64,
+    pub low: f64,
+    pub close: f64,
+    pub volume: i64,
+    pub market_cap: i64,
+}
+
 pub struct GetCoinsRequest<'a> {
     client: &'a Client,
 }
@@ -316,6 +328,50 @@ impl<'a> GetCoinMarketsRequest<'a> {
         let response: Response = self.client.request(request).await?;
 
         let data: Vec<CoinMarket> = response.response.json().await?;
+
+        Ok(data)
+    }
+}
+
+pub struct GetCoinOHLCLastFullDayRequest<'a> {
+    client: &'a Client,
+    coin_id: String,
+    quote: Option<String>,
+}
+
+impl<'a> GetCoinOHLCLastFullDayRequest<'a> {
+    pub fn new(client: &'a Client, coin_id: &str) -> Self {
+        Self {
+            client,
+            coin_id: String::from(coin_id),
+            quote: None,
+        }
+    }
+
+    pub fn quote(&mut self, quote: &str) -> &'a mut GetCoinOHLCLastFullDayRequest {
+        self.quote = Some(String::from(quote));
+        self
+    }
+
+    pub async fn send(&self) -> Result<Vec<CoinOHLC>, Error> {
+        let mut query: Vec<(&str, &str)> = Vec::new();
+
+        if let Some(quote) = &self.quote {
+            query.push(("quote", quote));
+        }
+
+        let request: reqwest::RequestBuilder = self
+            .client
+            .client
+            .get(format!(
+                "{}/coins/{}/ohlcv/latest",
+                self.client.api_url, self.coin_id
+            ))
+            .query(&query);
+
+        let response: Response = self.client.request(request).await?;
+
+        let data: Vec<CoinOHLC> = response.response.json().await?;
 
         Ok(data)
     }

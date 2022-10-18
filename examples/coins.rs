@@ -1,5 +1,7 @@
 use coinpaprika_api::client::Client;
-use coinpaprika_api::coins::{Coin, CoinDetails, CoinEvent, CoinExchange, CoinMarket, Tweet};
+use coinpaprika_api::coins::{
+    Coin, CoinDetails, CoinEvent, CoinExchange, CoinMarket, CoinOHLC, Tweet,
+};
 use std::error::Error;
 
 #[tokio::main]
@@ -68,6 +70,20 @@ async fn main() -> Result<(), Box<dyn Error>> {
     println!(
         "first 3 coin markets: {:#?}",
         coin_markets.iter().take(3).collect::<Vec<&CoinMarket>>()
+    );
+
+    //
+    // Get coin open/high/low/close for the last full day by coin_id.
+    //
+    let coin_ohlc_last_full_day: Vec<CoinOHLC> = client
+        .coin_ohlc_last_full_day("btc-bitcoin")
+        .quote("usd")
+        .send()
+        .await?;
+
+    println!(
+        "bitcoin ohlc for last full day: {:#?}",
+        coin_ohlc_last_full_day
     );
 
     Ok(())
