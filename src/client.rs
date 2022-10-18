@@ -7,8 +7,11 @@ use crate::error::Error;
 use crate::global::GetGlobalRequest;
 use crate::key::GetKeyInfoRequest;
 use crate::tickers::{GetHistoricalTicksRequest, GetTickerRequest, GetTickersRequest};
-use reqwest::{ClientBuilder, RequestBuilder, StatusCode};
-use std::time::Duration;
+use reqwest::StatusCode;
+use reqwest_middleware::{
+    ClientBuilder, ClientWithMiddleware, Error as ReqwestMiddlewareError, RequestBuilder,
+};
+use reqwest_retry::{policies::ExponentialBackoff, RetryTransientMiddleware};
 
 static DEFAULT_USER_AGENT: &str = "coinpaprika-api-rust-client";
 static API_URL: &str = "https://api.coinpaprika.com/v1/";
@@ -21,7 +24,7 @@ pub struct Response {
 }
 
 pub struct Client {
-    pub client: reqwest::Client,
+    pub client: ClientWithMiddleware,
     pub api_url: &'static str,
     api_key: Option<String>,
     user_agent: &'static str,
@@ -30,10 +33,11 @@ pub struct Client {
 impl Client {
     pub fn new() -> Self {
         Client {
-            client: ClientBuilder::new()
-                .timeout(Duration::from_secs(10))
-                .build()
-                .expect("Failed to build client"),
+            client: ClientBuilder::new(reqwest::Client::new())
+                .with(RetryTransientMiddleware::new_with_policy(
+                    ExponentialBackoff::builder().build_with_max_retries(3),
+                ))
+                .build(),
             api_url: API_URL,
             api_key: None,
             user_agent: DEFAULT_USER_AGENT,
@@ -42,10 +46,11 @@ impl Client {
 
     pub fn with_key(key: &str) -> Self {
         Client {
-            client: ClientBuilder::new()
-                .timeout(Duration::from_secs(10))
-                .build()
-                .expect("Failed to build client"),
+            client: ClientBuilder::new(reqwest::Client::new())
+                .with(RetryTransientMiddleware::new_with_policy(
+                    ExponentialBackoff::builder().build_with_max_retries(3),
+                ))
+                .build(),
             api_url: API_URL_PRO,
             api_key: Some(String::from(key)),
             user_agent: DEFAULT_USER_AGENT,
@@ -78,11 +83,16 @@ impl Client {
                 StatusCode::INTERNAL_SERVER_ERROR => return Err(Error::InternalServerError),
                 _ => {}
             },
-            Err(err) => {
-                if err.is_connect() || err.is_timeout() {
+            Err(err) => match err {
+                ReqwestMiddlewareError::Middleware(_err) => {
                     return Err(Error::ApiConnectionError);
                 }
-            }
+                ReqwestMiddlewareError::Reqwest(err) => {
+                    if err.is_connect() || err.is_timeout() {
+                        return Err(Error::ApiConnectionError);
+                    }
+                }
+            },
         };
 
         Ok(Response {

@@ -32,6 +32,9 @@ pub enum Error {
     // Error from http client.
     Reqwest(reqwest::Error),
 
+    // Error from client middleware.
+    Middleware(reqwest_middleware::Error),
+
     // Error from JSON creation/processing.
     Json(serde_json::Error),
 }
@@ -39,6 +42,12 @@ pub enum Error {
 impl From<reqwest::Error> for Error {
     fn from(e: reqwest::Error) -> Error {
         Error::Reqwest(e)
+    }
+}
+
+impl From<reqwest_middleware::Error> for Error {
+    fn from(e: reqwest_middleware::Error) -> Error {
+        Error::Middleware(e)
     }
 }
 
@@ -86,6 +95,9 @@ impl std::fmt::Display for Error {
                 write!(f, "Fail to connect to API.")
             }
             Error::Reqwest(err) => {
+                write!(f, "{}", err)
+            }
+            Error::Middleware(err) => {
                 write!(f, "{}", err)
             }
             Error::Json(err) => {

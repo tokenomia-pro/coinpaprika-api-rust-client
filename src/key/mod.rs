@@ -1,5 +1,6 @@
 use crate::client::{Client, Response};
 use crate::error::Error;
+use reqwest_middleware::RequestBuilder;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -33,7 +34,7 @@ impl<'a> GetKeyInfoRequest<'a> {
     }
 
     pub async fn send(&self) -> Result<KeyInfo, Error> {
-        let request: reqwest::RequestBuilder = self
+        let request: RequestBuilder = self
             .client
             .client
             .get(format!("{}/key/info", self.client.api_url));

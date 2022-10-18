@@ -1,6 +1,7 @@
 use crate::client::{Client, Response};
 use crate::error::Error;
 use chrono::prelude::*;
+use reqwest_middleware::RequestBuilder;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -51,7 +52,7 @@ impl<'a> GetTickersRequest<'a> {
             _ => vec![("quotes", self.quotes.join(","))],
         };
 
-        let request: reqwest::RequestBuilder = self
+        let request: RequestBuilder = self
             .client
             .client
             .get(format!("{}/tickers", self.client.api_url))
@@ -91,7 +92,7 @@ impl<'a> GetTickerRequest<'a> {
             _ => vec![("quotes", self.quotes.join(","))],
         };
 
-        let request: reqwest::RequestBuilder = self
+        let request: RequestBuilder = self
             .client
             .client
             .get(format!("{}/tickers/{}", self.client.api_url, self.coin_id))
@@ -174,7 +175,7 @@ impl<'a> GetHistoricalTicksRequest<'a> {
             query.push(("interval", interval));
         }
 
-        let request: reqwest::RequestBuilder = self
+        let request: RequestBuilder = self
             .client
             .client
             .get(format!(

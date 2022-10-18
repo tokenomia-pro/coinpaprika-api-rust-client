@@ -27,7 +27,7 @@ impl<'a> GetGlobalRequest<'a> {
     }
 
     pub async fn send(&self) -> Result<Global, Error> {
-        let request: reqwest::RequestBuilder = self
+        let request: reqwest_middleware::RequestBuilder = self
             .client
             .client
             .get(format!("{}/global", self.client.api_url));

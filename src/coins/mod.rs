@@ -1,6 +1,7 @@
 use crate::client::{Client, Response};
 use crate::error::Error;
 use chrono::prelude::*;
+use reqwest_middleware::RequestBuilder;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -170,7 +171,7 @@ impl<'a> GetCoinsRequest<'a> {
     }
 
     pub async fn send(&self) -> Result<Vec<Coin>, Error> {
-        let request: reqwest::RequestBuilder = self
+        let request: RequestBuilder = self
             .client
             .client
             .get(format!("{}/coins", self.client.api_url));
@@ -197,7 +198,7 @@ impl<'a> GetCoinRequest<'a> {
     }
 
     pub async fn send(&self) -> Result<CoinDetails, Error> {
-        let request: reqwest::RequestBuilder = self
+        let request: RequestBuilder = self
             .client
             .client
             .get(format!("{}/coins/{}", self.client.api_url, self.coin_id));
@@ -224,7 +225,7 @@ impl<'a> GetTwitterRequest<'a> {
     }
 
     pub async fn send(&self) -> Result<Vec<Tweet>, Error> {
-        let request: reqwest::RequestBuilder = self.client.client.get(format!(
+        let request: RequestBuilder = self.client.client.get(format!(
             "{}/coins/{}/twitter",
             self.client.api_url, self.coin_id
         ));
@@ -251,7 +252,7 @@ impl<'a> GetCoinEventsRequest<'a> {
     }
 
     pub async fn send(&self) -> Result<Vec<CoinEvent>, Error> {
-        let request: reqwest::RequestBuilder = self.client.client.get(format!(
+        let request: RequestBuilder = self.client.client.get(format!(
             "{}/coins/{}/events",
             self.client.api_url, self.coin_id
         ));
@@ -278,7 +279,7 @@ impl<'a> GetCoinExchangesRequest<'a> {
     }
 
     pub async fn send(&self) -> Result<Vec<CoinExchange>, Error> {
-        let request: reqwest::RequestBuilder = self.client.client.get(format!(
+        let request: RequestBuilder = self.client.client.get(format!(
             "{}/coins/{}/exchanges",
             self.client.api_url, self.coin_id
         ));
@@ -317,7 +318,7 @@ impl<'a> GetCoinMarketsRequest<'a> {
             _ => vec![("quotes", self.quotes.join(","))],
         };
 
-        let request: reqwest::RequestBuilder = self
+        let request: RequestBuilder = self
             .client
             .client
             .get(format!(
@@ -361,7 +362,7 @@ impl<'a> GetCoinOHLCLastFullDayRequest<'a> {
             query.push(("quote", quote));
         }
 
-        let request: reqwest::RequestBuilder = self
+        let request: RequestBuilder = self
             .client
             .client
             .get(format!(
@@ -436,7 +437,7 @@ impl<'a> GetCoinOHLCHistoricalRequest<'a> {
             query.push(("quote", quote));
         }
 
-        let request: reqwest::RequestBuilder = self
+        let request: RequestBuilder = self
             .client
             .client
             .get(format!(
@@ -480,7 +481,7 @@ impl<'a> GetCoinOHLCTodayRequest<'a> {
             query.push(("quote", quote));
         }
 
-        let request: reqwest::RequestBuilder = self
+        let request: RequestBuilder = self
             .client
             .client
             .get(format!(
