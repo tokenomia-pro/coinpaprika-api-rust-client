@@ -452,3 +452,47 @@ impl<'a> GetCoinOHLCHistoricalRequest<'a> {
         Ok(data)
     }
 }
+
+pub struct GetCoinOHLCTodayRequest<'a> {
+    client: &'a Client,
+    coin_id: String,
+    quote: Option<String>,
+}
+
+impl<'a> GetCoinOHLCTodayRequest<'a> {
+    pub fn new(client: &'a Client, coin_id: &str) -> Self {
+        Self {
+            client,
+            coin_id: String::from(coin_id),
+            quote: None,
+        }
+    }
+
+    pub fn quote(&mut self, quote: &str) -> &'a mut GetCoinOHLCTodayRequest {
+        self.quote = Some(String::from(quote));
+        self
+    }
+
+    pub async fn send(&self) -> Result<Vec<CoinOHLC>, Error> {
+        let mut query: Vec<(&str, &str)> = Vec::new();
+
+        if let Some(quote) = &self.quote {
+            query.push(("quote", quote));
+        }
+
+        let request: reqwest::RequestBuilder = self
+            .client
+            .client
+            .get(format!(
+                "{}/coins/{}/ohlcv/today",
+                self.client.api_url, self.coin_id
+            ))
+            .query(&query);
+
+        let response: Response = self.client.request(request).await?;
+
+        let data: Vec<CoinOHLC> = response.response.json().await?;
+
+        Ok(data)
+    }
+}

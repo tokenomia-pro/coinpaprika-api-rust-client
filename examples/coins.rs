@@ -100,5 +100,16 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     println!("{:#?}", coin_ohlc_historical);
 
+    //
+    // Get coin open/high/low/close for today by coin_id.
+    //
+    let coin_ohlc_today: Vec<CoinOHLC> = client
+        .coin_ohlc_today("btc-bitcoin")
+        .quote("btc")
+        .send()
+        .await?;
+
+    println!("bitcoin ohlc for today: {:#?}", coin_ohlc_today);
+
     Ok(())
 }
