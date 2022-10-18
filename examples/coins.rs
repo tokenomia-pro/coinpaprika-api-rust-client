@@ -86,5 +86,19 @@ async fn main() -> Result<(), Box<dyn Error>> {
         coin_ohlc_last_full_day
     );
 
+    //
+    // Get historical open/high/low/close by coin_id.
+    //
+    let coin_ohlc_historical: Vec<CoinOHLC> = client
+        .coin_ohlc_historical("btc-bitcoin")
+        .start("2022-10-18")
+        .end("2022-10-18")
+        .limit(2)
+        .quote("btc")
+        .send()
+        .await?;
+
+    println!("{:#?}", coin_ohlc_historical);
+
     Ok(())
 }

@@ -1,5 +1,6 @@
 use crate::client::{Client, Response};
 use crate::error::Error;
+use chrono::prelude::*;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -365,6 +366,81 @@ impl<'a> GetCoinOHLCLastFullDayRequest<'a> {
             .client
             .get(format!(
                 "{}/coins/{}/ohlcv/latest",
+                self.client.api_url, self.coin_id
+            ))
+            .query(&query);
+
+        let response: Response = self.client.request(request).await?;
+
+        let data: Vec<CoinOHLC> = response.response.json().await?;
+
+        Ok(data)
+    }
+}
+
+pub struct GetCoinOHLCHistoricalRequest<'a> {
+    client: &'a Client,
+    coin_id: String,
+    start: String,
+    end: Option<String>,
+    limit: Option<String>,
+    quote: Option<String>,
+}
+
+impl<'a> GetCoinOHLCHistoricalRequest<'a> {
+    pub fn new(client: &'a Client, coin_id: &str) -> Self {
+        let now: DateTime<Utc> = Utc::now(); // e.g. `2014-11-28T12:45:59.324310806Z`
+
+        Self {
+            client,
+            coin_id: String::from(coin_id),
+            start: format!("{}-{}-{}", now.year(), now.month(), now.day()),
+            end: None,
+            limit: None,
+            quote: None,
+        }
+    }
+
+    pub fn start(&mut self, start: &str) -> &'a mut GetCoinOHLCHistoricalRequest {
+        self.start = String::from(start);
+        self
+    }
+
+    pub fn end(&mut self, end: &str) -> &'a mut GetCoinOHLCHistoricalRequest {
+        self.end = Some(String::from(end));
+        self
+    }
+
+    pub fn limit(&mut self, limit: i32) -> &'a mut GetCoinOHLCHistoricalRequest {
+        self.limit = Some(limit.to_string());
+        self
+    }
+
+    pub fn quote(&mut self, quote: &str) -> &'a mut GetCoinOHLCHistoricalRequest {
+        self.quote = Some(String::from(quote));
+        self
+    }
+
+    pub async fn send(&self) -> Result<Vec<CoinOHLC>, Error> {
+        let mut query: Vec<(&str, &str)> = vec![("start", self.start.as_ref())];
+
+        if let Some(end) = &self.end {
+            query.push(("end", end));
+        }
+
+        if let Some(limit) = &self.limit {
+            query.push(("limit", limit));
+        }
+
+        if let Some(quote) = &self.quote {
+            query.push(("quote", quote));
+        }
+
+        let request: reqwest::RequestBuilder = self
+            .client
+            .client
+            .get(format!(
+                "{}/coins/{}/ohlcv/historical",
                 self.client.api_url, self.coin_id
             ))
             .query(&query);
