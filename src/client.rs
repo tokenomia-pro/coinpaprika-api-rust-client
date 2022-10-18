@@ -1,6 +1,6 @@
 use crate::coins::{
-    GetCoinEventsRequest, GetCoinExchangesRequest, GetCoinRequest, GetCoinsRequest,
-    GetTwitterRequest,
+    GetCoinEventsRequest, GetCoinExchangesRequest, GetCoinMarketsRequest, GetCoinRequest,
+    GetCoinsRequest, GetTwitterRequest,
 };
 use crate::error::Error;
 use crate::global::GetGlobalRequest;
@@ -98,6 +98,10 @@ impl Client {
 
     pub fn coin_exchanges(&self, coin_id: &str) -> GetCoinExchangesRequest {
         GetCoinExchangesRequest::new(self, coin_id)
+    }
+
+    pub fn coin_markets(&self, coin_id: &str) -> GetCoinMarketsRequest {
+        GetCoinMarketsRequest::new(self, coin_id)
     }
 
     //

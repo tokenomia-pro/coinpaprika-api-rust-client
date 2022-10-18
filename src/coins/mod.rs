@@ -90,43 +90,61 @@ pub struct CoinDetails {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Tweet {
-    date: String,
-    user_name: String,
-    user_image_link: String,
-    status: String,
-    is_retweet: bool,
-    retweet_count: i32,
-    like_count: i32,
-    status_link: String,
-    status_id: String,
-    media_link: Option<String>,
-    youtube_link: Option<String>,
+    pub date: String,
+    pub user_name: String,
+    pub user_image_link: String,
+    pub status: String,
+    pub is_retweet: bool,
+    pub retweet_count: i32,
+    pub like_count: i32,
+    pub status_link: String,
+    pub status_id: String,
+    pub media_link: Option<String>,
+    pub youtube_link: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CoinEvent {
-    id: String,
-    date: String,
-    date_to: Option<String>,
-    name: String,
-    description: String,
-    is_conference: bool,
-    link: String,
-    proof_image_link: Option<String>,
+    pub id: String,
+    pub date: String,
+    pub date_to: Option<String>,
+    pub name: String,
+    pub description: String,
+    pub is_conference: bool,
+    pub link: String,
+    pub proof_image_link: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Fiat {
-    name: String,
-    symbol: String,
+    pub name: String,
+    pub symbol: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CoinExchange {
-    id: String,
-    name: String,
-    fiats: Vec<Fiat>,
-    adjusted_volume_24h_share: f64,
+    pub id: String,
+    pub name: String,
+    pub fiats: Vec<Fiat>,
+    pub adjusted_volume_24h_share: f64,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CoinMarket {
+    pub exchange_id: String,
+    pub exchange_name: String,
+    pub pair: String,
+    pub base_currency_id: String,
+    pub base_currency_name: String,
+    pub quote_currency_id: String,
+    pub quote_currency_name: String,
+    pub market_url: Option<String>,
+    pub category: String,
+    pub fee_type: String,
+    pub outlier: bool,
+    pub adjusted_volume_24h_share: f64,
+    pub quotes: Value,
+    pub last_updated: String,
 }
 
 pub struct GetCoinsRequest<'a> {
@@ -255,6 +273,49 @@ impl<'a> GetCoinExchangesRequest<'a> {
         let response: Response = self.client.request(request).await?;
 
         let data: Vec<CoinExchange> = response.response.json().await?;
+
+        Ok(data)
+    }
+}
+
+pub struct GetCoinMarketsRequest<'a> {
+    client: &'a Client,
+    coin_id: String,
+    quotes: Vec<String>,
+}
+
+impl<'a> GetCoinMarketsRequest<'a> {
+    pub fn new(client: &'a Client, coin_id: &str) -> Self {
+        Self {
+            client,
+            coin_id: String::from(coin_id),
+            quotes: vec![],
+        }
+    }
+
+    pub fn quotes(&mut self, quotes: Vec<&str>) -> &'a mut GetCoinMarketsRequest {
+        self.quotes = quotes.iter().map(|&q| String::from(q)).collect();
+        self
+    }
+
+    pub async fn send(&self) -> Result<Vec<CoinMarket>, Error> {
+        let query = match self.quotes.len() {
+            0 => vec![],
+            _ => vec![("quotes", self.quotes.join(","))],
+        };
+
+        let request: reqwest::RequestBuilder = self
+            .client
+            .client
+            .get(format!(
+                "{}/coins/{}/markets",
+                self.client.api_url, self.coin_id
+            ))
+            .query(&query);
+
+        let response: Response = self.client.request(request).await?;
+
+        let data: Vec<CoinMarket> = response.response.json().await?;
 
         Ok(data)
     }
