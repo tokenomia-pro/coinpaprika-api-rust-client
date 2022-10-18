@@ -12,6 +12,7 @@ use std::time::Duration;
 
 static DEFAULT_USER_AGENT: &str = "coinpaprika-api-rust-client";
 static API_URL: &str = "https://api.coinpaprika.com/v1/";
+static API_URL_PRO: &str = "https://api-pro.coinpaprika.com/v1/";
 
 #[derive(Debug)]
 pub struct Response {
@@ -22,25 +23,43 @@ pub struct Response {
 pub struct Client {
     pub client: reqwest::Client,
     pub api_url: &'static str,
+    api_key: Option<String>,
     user_agent: &'static str,
 }
 
 impl Client {
     pub fn new() -> Self {
-        // TODO: Handle api keys for accounts higher than "free" tier.
-
         Client {
             client: ClientBuilder::new()
                 .timeout(Duration::from_secs(10))
                 .build()
                 .expect("Failed to build client"),
             api_url: API_URL,
+            api_key: None,
+            user_agent: DEFAULT_USER_AGENT,
+        }
+    }
+
+    pub fn with_key(key: &str) -> Self {
+        Client {
+            client: ClientBuilder::new()
+                .timeout(Duration::from_secs(10))
+                .build()
+                .expect("Failed to build client"),
+            api_url: API_URL_PRO,
+            api_key: Some(String::from(key)),
             user_agent: DEFAULT_USER_AGENT,
         }
     }
 
     pub async fn request(&self, request: RequestBuilder) -> Result<Response, Error> {
-        let request = request.header("User-Agent", self.user_agent).build()?;
+        let mut request = request.header("User-Agent", self.user_agent);
+
+        if let Some(api_key) = &self.api_key {
+            request = request.header("Authorization", api_key);
+        }
+
+        let request = request.build()?;
 
         let response = self
             .client
