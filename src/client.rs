@@ -104,6 +104,7 @@ impl Client {
     //
     // Key
     //
+    /// Call to [/key/info](https://api.coinpaprika.com/#tag/Key/paths/~1key~1info/get)
     pub fn key_info(&self) -> GetKeyInfoRequest {
         GetKeyInfoRequest::new(self)
     }
@@ -111,6 +112,7 @@ impl Client {
     //
     // Global
     //
+    /// Call to [/global](https://api.coinpaprika.com/#tag/Global/paths/~1global/get)
     pub fn global(&self) -> GetGlobalRequest {
         GetGlobalRequest::new(self)
     }
@@ -157,14 +159,19 @@ impl Client {
     //
     // Tickers
     //
+    /// Call to [/tickers](https://api.coinpaprika.com/#tag/Tickers/operation/getTickers)
     pub fn tickers(&self) -> GetTickersRequest {
         GetTickersRequest::new(self)
     }
 
+    /// Call to
+    /// [/ticker/{coin_id}](https://api.coinpaprika.com/#tag/Tickers/operation/getTickersById)
     pub fn ticker(&self, coin_id: &str) -> GetTickerRequest {
         GetTickerRequest::new(self, coin_id)
     }
 
+    /// Call to
+    /// [/ticker/{coin_id}/historical](https://api.coinpaprika.com/#tag/Tickers/operation/getTickersHistoricalById)
     pub fn historical_ticks(&self, coin_id: &str) -> GetHistoricalTicksRequest {
         GetHistoricalTicksRequest::new(self, coin_id)
     }

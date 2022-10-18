@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 #[derive(Debug, Serialize, Deserialize)]
+/// Price data of a single cryptocurrency on coinpaprika.com
 pub struct Ticker {
     pub id: String,
     pub name: String,
@@ -21,13 +22,17 @@ pub struct Ticker {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+/// Historical data for a given cryptocurrency on coinpaprika.com
 pub struct HistoricalTick {
+    /// RFC3999 (ISO-8601) format
     pub timestamp: String,
     pub price: f64,
     pub volume_24h: i64,
     pub market_cap: i64,
 }
 
+/// Request for getting data of all active cryptocurrencies on coinpaprika.com
+/// [/tickers](https://api.coinpaprika.com/#tag/Tickers/operation/getTickers)
 pub struct GetTickersRequest<'a> {
     client: &'a Client,
     quotes: Vec<String>,
@@ -41,6 +46,10 @@ impl<'a> GetTickersRequest<'a> {
         }
     }
 
+    /// List of quotes to return. Up to 3 quotes at once. Currently allowed values:
+    /// BTC, ETH, USD, EUR, PLN, KRW, GBP, CAD, JPY, RUB, TRY, NZD, AUD, CHF, UAH, HKD, SGD, NGN,
+    /// PHP, MXN, BRL, THB, CLP, CNY, CZK, DKK, HUF, IDR, ILS, INR, MYR, NOK, PKR, SEK, TWD, ZAR,
+    /// VND, BOB, COP, PEN, ARS, ISK
     pub fn quotes(&mut self, quotes: Vec<&str>) -> &'a mut GetTickersRequest {
         self.quotes = quotes.iter().map(|&q| String::from(q)).collect();
         self
@@ -66,6 +75,8 @@ impl<'a> GetTickersRequest<'a> {
     }
 }
 
+/// Request for getting data of single cryptocurrency on coinpaprika.com
+/// [/ticker/{coin_id}](https://api.coinpaprika.com/#tag/Tickers/operation/getTickersById)
 pub struct GetTickerRequest<'a> {
     client: &'a Client,
     coin_id: String,
@@ -81,6 +92,10 @@ impl<'a> GetTickerRequest<'a> {
         }
     }
 
+    /// List of quotes to return. Up to 3 quotes at once. Currently allowed values:
+    /// BTC, ETH, USD, EUR, PLN, KRW, GBP, CAD, JPY, RUB, TRY, NZD, AUD, CHF, UAH, HKD, SGD, NGN,
+    /// PHP, MXN, BRL, THB, CLP, CNY, CZK, DKK, HUF, IDR, ILS, INR, MYR, NOK, PKR, SEK, TWD, ZAR,
+    /// VND, BOB, COP, PEN, ARS, ISK
     pub fn quotes(&mut self, quotes: Vec<&str>) -> &'a mut GetTickerRequest {
         self.quotes = quotes.iter().map(|&q| String::from(q)).collect();
         self
@@ -106,6 +121,8 @@ impl<'a> GetTickerRequest<'a> {
     }
 }
 
+/// Request for getting historical data for a given cryptocurrency on coinpaprika.com
+/// [/ticker/{coin_id}/historical](https://api.coinpaprika.com/#tag/Tickers/operation/getTickersHistoricalById)
 pub struct GetHistoricalTicksRequest<'a> {
     client: &'a Client,
     coin_id: String,
@@ -131,26 +148,50 @@ impl<'a> GetHistoricalTicksRequest<'a> {
         }
     }
 
+    /// Start point for historical data
+    ///
+    /// Supported formats:
+    /// * RFC3999 (ISO-8601) eg. 2018-02-15T05:15:00Z
+    /// * Simple date (yyyy-mm-dd) eg. 2018-02-15
+    /// * Unix timestamp (in seconds) eg. 1518671700
     pub fn start(&mut self, start: &str) -> &'a mut GetHistoricalTicksRequest {
         self.start = String::from(start);
         self
     }
 
+    /// End point for historical data
+    ///
+    /// Default: `"NOW"`
+    ///
+    /// Supported formats:
+    /// RFC3999 (ISO-8601) eg. 2018-02-15T05:15:00Z
+    /// Simple date (yyyy-mm-dd) eg. 2018-02-15
+    /// Unix timestamp (in seconds) eg. 1518671700
     pub fn end(&mut self, end: &str) -> &'a mut GetHistoricalTicksRequest {
         self.end = Some(String::from(end));
         self
     }
 
+    /// Limit of result rows (max `5000`)
+    ///
+    /// Default: `1000`
     pub fn limit(&mut self, limit: i32) -> &'a mut GetHistoricalTicksRequest {
         self.limit = Some(limit.to_string());
         self
     }
 
+    /// Returned data quote (available values: `usd` `btc`)
+    ///
+    /// Default: `"usd"`
     pub fn quote(&mut self, quote: &str) -> &'a mut GetHistoricalTicksRequest {
         self.quote = Some(String::from(quote));
         self
     }
 
+    /// Returned points interval (available values: `5m` `10m` `15m` `30m` `45m` `1h` `2h` `3h`
+    /// `6h` `12h` `24h` `1d` `7d` `14d` `30d` `90d` `365d`)
+    ///
+    /// Default: `"5m"`
     pub fn interval(&mut self, interval: &str) -> &'a mut GetHistoricalTicksRequest {
         self.interval = Some(String::from(interval));
         self
