@@ -120,38 +120,53 @@ impl Client {
     //
     // Coins
     //
+    /// Call to [/coins](https://api.coinpaprika.com/#tag/Coins/paths/~1coins/get)
     pub fn coins(&self) -> GetCoinsRequest {
         GetCoinsRequest::new(self)
     }
 
+    /// Call to [/coins/{coin_id}](https://api.coinpaprika.com/#tag/Coins/operation/getCoinById)
     pub fn coin(&self, coin_id: &str) -> GetCoinRequest {
         GetCoinRequest::new(self, coin_id)
     }
 
+    /// Call to
+    /// [/coins/{coin_id}/twitter](https://api.coinpaprika.com/#tag/Coins/paths/~1coins~1%7Bcoin_id%7D~1twitter/get)
     pub fn twitter(&self, coin_id: &str) -> GetTwitterRequest {
         GetTwitterRequest::new(self, coin_id)
     }
 
+    /// Call to
+    /// [/coins/{coin_id}/events](https://api.coinpaprika.com/#tag/Coins/paths/~1coins~1%7Bcoin_id%7D~1events/get)
     pub fn coin_events(&self, coin_id: &str) -> GetCoinEventsRequest {
         GetCoinEventsRequest::new(self, coin_id)
     }
 
+    /// Call to
+    /// [/coins/{coin_id}/exchanges](https://api.coinpaprika.com/#tag/Coins/paths/~1coins~1%7Bcoin_id%7D~1exchanges/get)
     pub fn coin_exchanges(&self, coin_id: &str) -> GetCoinExchangesRequest {
         GetCoinExchangesRequest::new(self, coin_id)
     }
 
+    /// Call to [/coins/{coin_id}/markets](https://api.coinpaprika.com/#tag/Coins/paths/~1coins~1%7Bcoin_id%7D~1markets/get)
     pub fn coin_markets(&self, coin_id: &str) -> GetCoinMarketsRequest {
         GetCoinMarketsRequest::new(self, coin_id)
     }
 
+    /// Call to
+    /// [/coins/{coin_id}/ohlcv/latest](https://api.coinpaprika.com/#tag/Coins/paths/~1coins~1%7Bcoin_id%7D~1ohlcv~1latest~1/get)
     pub fn coin_ohlc_last_full_day(&self, coin_id: &str) -> GetCoinOHLCLastFullDayRequest {
         GetCoinOHLCLastFullDayRequest::new(self, coin_id)
     }
 
+    /// Call to
+    /// [/coins/{coin_id}/ohlcv/historical](https://api.coinpaprika.com/#tag/Coins/paths/~1coins~1%7Bcoin_id%7D~1ohlcv~1historical/get)
     pub fn coin_ohlc_historical(&self, coin_id: &str) -> GetCoinOHLCHistoricalRequest {
         GetCoinOHLCHistoricalRequest::new(self, coin_id)
     }
 
+    /// Call to
+    /// [/coins/{coin_id}/ohlcv/today](https://api.coinpaprika.com/#tag/Coins/paths/~1coins~1%7Bcoin_id%7D~1ohlcv~1today~1/get)
     pub fn coin_ohlc_today(&self, coin_id: &str) -> GetCoinOHLCTodayRequest {
         GetCoinOHLCTodayRequest::new(self, coin_id)
     }
