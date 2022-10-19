@@ -3,6 +3,7 @@ use crate::coins::{
     GetCoinOHLCHistoricalRequest, GetCoinOHLCLastFullDayRequest, GetCoinOHLCTodayRequest,
     GetCoinRequest, GetCoinsRequest, GetTwitterRequest,
 };
+use crate::contracts::{GetContractPlatformsRequest, GetContractsRequest};
 use crate::error::Error;
 use crate::exchanges::{GetExchangeMarketsRequest, GetExchangeRequest, GetExchangesRequest};
 use crate::global::GetGlobalRequest;
@@ -260,6 +261,20 @@ impl Client {
         quote_currency_id: &str,
     ) -> GetPriceConversionRequest {
         GetPriceConversionRequest::new(self, base_currency_id, quote_currency_id)
+    }
+
+    //
+    // Contracts
+    //
+    /// Call to [/contracts](https://api.coinpaprika.com/#tag/Contracts/operation/getPlatforms)
+    pub fn contract_platforms(&self) -> GetContractPlatformsRequest {
+        GetContractPlatformsRequest::new(self)
+    }
+
+    /// Call to
+    /// [/contracts/{platform_id}](https://api.coinpaprika.com/#tag/Contracts/operation/getContracts)
+    pub fn contracts(&self, platform_id: &str) -> GetContractsRequest {
+        GetContractsRequest::new(self, platform_id)
     }
 }
 

@@ -68,3 +68,6 @@ pub mod exchanges;
 
 /// Requests for "Tools" section of the API
 pub mod tools;
+
+/// Requests for "Contracts" section of the API
+pub mod contracts;
