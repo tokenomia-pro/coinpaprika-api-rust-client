@@ -38,20 +38,27 @@
 /// Client struct used for connecting with coinpaprika.com
 pub mod client;
 
-/// Requests for "Coins" section of the API
-pub mod coins;
-
 /// Possible errors Client can return
 pub mod error;
 
-/// Requests for "Global" section of the API
-pub mod global;
+//
+// API Sections
+//
 
 /// Requests for "Key" section of the API
 pub mod key;
 
-/// Requests for "Tickers" section of the API
-pub mod tickers;
+/// Requests for "Global" section of the API
+pub mod global;
+
+/// Requests for "Coins" section of the API
+pub mod coins;
 
 /// Requests for "People" section of the API
 pub mod people;
+
+/// Requests for "Tags" section of the API
+pub mod tags;
+
+/// Requests for "Tickers" section of the API
+pub mod tickers;

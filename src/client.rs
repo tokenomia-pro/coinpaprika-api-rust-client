@@ -7,6 +7,7 @@ use crate::error::Error;
 use crate::global::GetGlobalRequest;
 use crate::key::GetKeyInfoRequest;
 use crate::people::GetPersonRequest;
+use crate::tags::{GetTagRequest, GetTagsRequest};
 use crate::tickers::{GetHistoricalTicksRequest, GetTickerRequest, GetTickersRequest};
 use reqwest::StatusCode;
 use reqwest_middleware::{
@@ -184,6 +185,21 @@ impl Client {
     /// [/people/{person_id}](https://api.coinpaprika.com/#tag/People/operation/getPeopleById)
     pub fn person(&self, person_id: &str) -> GetPersonRequest {
         GetPersonRequest::new(self, person_id)
+    }
+
+    //
+    // Tags
+    //
+    /// Call to
+    /// [/tags](https://api.coinpaprika.com/#tag/Tags/paths/~1tags/get)
+    pub fn tags(&self) -> GetTagsRequest {
+        GetTagsRequest::new(self)
+    }
+
+    /// Call to
+    /// [/tags/{tag_id}](https://api.coinpaprika.com/#tag/Tags/paths/~1tags~1%7Btag_id%7D/get)
+    pub fn tag(&self, tag_id: &str) -> GetTagRequest {
+        GetTagRequest::new(self, tag_id)
     }
 
     //

@@ -42,7 +42,7 @@ pub struct Parent {
 
 #[derive(Debug, Serialize, Deserialize)]
 /// Tag assigned to a coin
-pub struct Tag {
+pub struct CoinTag {
     /// ID of the tag
     pub id: String,
 
@@ -123,7 +123,7 @@ pub struct CoinDetails {
     pub logo: String,
 
     /// The array of tags to which this coin was assigned on coinpaprika.com
-    pub tags: Vec<Tag>,
+    pub tags: Vec<CoinTag>,
 
     /// The cryptocurrency founding and/or developing team
     pub team: Vec<Team>,

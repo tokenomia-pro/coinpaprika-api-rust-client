@@ -1,5 +1,6 @@
 use crate::client::{Client, Response};
 use crate::error::Error;
+use reqwest_middleware::RequestBuilder;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -51,7 +52,7 @@ impl<'a> GetPersonRequest<'a> {
     }
 
     pub async fn send(&self) -> Result<Person, Error> {
-        let request: reqwest_middleware::RequestBuilder = self
+        let request: RequestBuilder = self
             .client
             .client
             .get(format!("{}/people/{}", self.client.api_url, self.person_id));

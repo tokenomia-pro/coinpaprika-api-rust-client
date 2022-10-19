@@ -1,5 +1,6 @@
 use crate::client::{Client, Response};
 use crate::error::Error;
+use reqwest_middleware::RequestBuilder;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -54,7 +55,7 @@ impl<'a> GetGlobalRequest<'a> {
     }
 
     pub async fn send(&self) -> Result<Global, Error> {
-        let request: reqwest_middleware::RequestBuilder = self
+        let request: RequestBuilder = self
             .client
             .client
             .get(format!("{}/global", self.client.api_url));
