@@ -1,41 +1,48 @@
 #[derive(Debug)]
+/// Error enum for handling different types of errors within the client
 pub enum Error {
-    // 400 Bad Request
-    // The server could not process the request due to invalid request parameters or invalid format
-    // of the parameters.
+    /// 400 Bad Request
+    ///
+    /// The server could not process the request due to invalid request parameters or invalid format
+    /// of the parameters.
     InvalidRequestError,
 
-    // 402 Payment Required
-    // The request could not be processed because of the user has an insufficient plan. If you want
-    // to be able to process this request, get a higher plan.
+    /// 402 Payment Required
+    ///
+    /// The request could not be processed because of the user has an insufficient plan. If you want
+    /// to be able to process this request, get a higher plan.
     InsufficientPlan,
 
-    // 403 Forbidden
-    // The request could not be processed due to invalid API key.
+    /// 403 Forbidden
+    ///
+    /// The request could not be processed due to invalid API key.
     InvalidApiKey,
 
-    // 404 Not Found
-    // The server could not process the request due to invalid URL or invalid path parameter.
+    /// 404 Not Found
+    ///
+    /// The server could not process the request due to invalid URL or invalid path parameter.
     InvalidParameter,
 
-    // 429 Too Many Requests
-    // The rate limit has been exceeded. Reduce the frequency of requests to avoid this error.
+    /// 429 Too Many Requests
+    ///
+    /// The rate limit has been exceeded. Reduce the frequency of requests to avoid this error.
     RateLimitError,
 
-    // 500 Internal Server Error
-    // An unexpected server error has occured.
+    /// 500 Internal Server Error
+    ///
+    /// An unexpected server error has occured.
     InternalServerError,
 
-    // Failed to connect with API.
+    /// Failed to connect with API.
     ApiConnectionError,
 
-    // Error from http client.
+    /// Error from http client.
     Reqwest(reqwest::Error),
 
-    // Error from client middleware.
+    /// Error from client middleware.
     Middleware(reqwest_middleware::Error),
 
-    // Error from JSON creation/processing.
+    /// Error from JSON creation/processing.
     Json(serde_json::Error),
 }
 
