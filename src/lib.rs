@@ -52,3 +52,6 @@ pub mod key;
 
 /// Requests for "Tickers" section of the API
 pub mod tickers;
+
+/// Requests for "People" section of the API
+pub mod people;

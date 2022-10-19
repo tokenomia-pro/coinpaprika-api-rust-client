@@ -6,6 +6,7 @@ use crate::coins::{
 use crate::error::Error;
 use crate::global::GetGlobalRequest;
 use crate::key::GetKeyInfoRequest;
+use crate::people::GetPersonRequest;
 use crate::tickers::{GetHistoricalTicksRequest, GetTickerRequest, GetTickersRequest};
 use reqwest::StatusCode;
 use reqwest_middleware::{
@@ -174,6 +175,15 @@ impl Client {
     /// [/coins/{coin_id}/ohlcv/today](https://api.coinpaprika.com/#tag/Coins/paths/~1coins~1%7Bcoin_id%7D~1ohlcv~1today~1/get)
     pub fn coin_ohlc_today(&self, coin_id: &str) -> GetCoinOHLCTodayRequest {
         GetCoinOHLCTodayRequest::new(self, coin_id)
+    }
+
+    //
+    // People
+    //
+    /// Call to
+    /// [/people/{person_id}](https://api.coinpaprika.com/#tag/People/operation/getPeopleById)
+    pub fn person(&self, person_id: &str) -> GetPersonRequest {
+        GetPersonRequest::new(self, person_id)
     }
 
     //
