@@ -1,5 +1,7 @@
 # Coinpaprika API
 
+[![Logo](https://coinpaprika.com/static/files/df51e301.png#greywizard/rock-coin-web/assets/img/cp_logo-transparent.png)](https://api.coinpaprika.com/)
+
 Coinpaprika API Rust library provides access to [Coinpaprika API](https://api.coinpaprika.com/)
 for applications written in Rust programming language.
 
