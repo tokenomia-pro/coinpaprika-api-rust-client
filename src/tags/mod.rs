@@ -7,29 +7,29 @@ use serde::{Deserialize, Serialize};
 /// Basic information about cryptocurrency tag
 pub struct Tag {
     /// ID of the tag
-    id: String,
+    pub id: String,
 
     /// Name of the tag
-    name: String,
+    pub name: String,
 
     /// Number of coins with this tag
-    coin_counter: i32,
+    pub coin_counter: i32,
 
     /// Number of ico projects with this tag
-    ico_counter: i32,
+    pub ico_counter: i32,
 
     /// Description of the tag
-    description: String,
+    pub description: String,
 
     #[serde(rename = "type")]
     /// Type of tag
-    tag_type: String,
+    pub tag_type: String,
 
     /// Coins associated with the tag
-    coins: Option<Vec<String>>,
+    pub coins: Option<Vec<String>>,
 
     /// ICOs associated with the tag
-    icos: Option<Vec<String>>,
+    pub icos: Option<Vec<String>>,
 }
 
 /// Request for getting basic information about cryptocurrencies tags (categories):
