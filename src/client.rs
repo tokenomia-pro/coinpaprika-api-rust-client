@@ -18,11 +18,15 @@ static API_URL: &str = "https://api.coinpaprika.com/v1/";
 static API_URL_PRO: &str = "https://api-pro.coinpaprika.com/v1/";
 
 #[derive(Debug)]
+/// Response helper struct
 pub struct Response {
+    /// Http response
     pub response: reqwest::Response,
+    /// Http request
     pub request: reqwest::Request,
 }
 
+/// Client struct used for connecting with coinpaprika.com
 pub struct Client {
     pub client: ClientWithMiddleware,
     pub api_url: &'static str,
@@ -44,6 +48,7 @@ impl Client {
         }
     }
 
+    /// Function to create Client with API Key
     pub fn with_key(key: &str) -> Self {
         Client {
             client: ClientBuilder::new(reqwest::Client::new())
