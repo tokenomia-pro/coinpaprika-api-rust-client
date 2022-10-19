@@ -62,3 +62,6 @@ pub mod tags;
 
 /// Requests for "Tickers" section of the API
 pub mod tickers;
+
+/// Requests for "Exchanges" section of the API
+pub mod exchanges;

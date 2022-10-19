@@ -4,6 +4,7 @@ use crate::coins::{
     GetCoinRequest, GetCoinsRequest, GetTwitterRequest,
 };
 use crate::error::Error;
+use crate::exchanges::{GetExchangeMarketsRequest, GetExchangeRequest, GetExchangesRequest};
 use crate::global::GetGlobalRequest;
 use crate::key::GetKeyInfoRequest;
 use crate::people::GetPersonRequest;
@@ -220,6 +221,26 @@ impl Client {
     /// [/ticker/{coin_id}/historical](https://api.coinpaprika.com/#tag/Tickers/operation/getTickersHistoricalById)
     pub fn historical_ticks(&self, coin_id: &str) -> GetHistoricalTicksRequest {
         GetHistoricalTicksRequest::new(self, coin_id)
+    }
+
+    //
+    // Exchanges
+    //
+    /// Call to [/exchanges](https://api.coinpaprika.com/#tag/Exchanges/operation/getExchanges)
+    pub fn exchanges(&self) -> GetExchangesRequest {
+        GetExchangesRequest::new(self)
+    }
+
+    /// Call to
+    /// [/exchanges/{exchange_id}](https://api.coinpaprika.com/#tag/Exchanges/operation/getExchangeByID)
+    pub fn exchange(&self, exchange_id: &str) -> GetExchangeRequest {
+        GetExchangeRequest::new(self, exchange_id)
+    }
+
+    /// Call to
+    /// [/exchanges/{exchange_id}/markets](https://api.coinpaprika.com/#tag/Exchanges/paths/~1exchanges~1%7Bexchange_id%7D~1markets/get)
+    pub fn exchange_markets(&self, exchange_id: &str) -> GetExchangeMarketsRequest {
+        GetExchangeMarketsRequest::new(self, exchange_id)
     }
 }
 

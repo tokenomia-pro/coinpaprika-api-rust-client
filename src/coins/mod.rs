@@ -1,5 +1,6 @@
 use crate::client::{Client, Response};
 use crate::error::Error;
+use crate::exchanges::Fiat;
 use chrono::prelude::*;
 use reqwest_middleware::RequestBuilder;
 use serde::{Deserialize, Serialize};
@@ -231,13 +232,6 @@ pub struct CoinEvent {
     pub is_conference: bool,
     pub link: Option<String>,
     pub proof_image_link: Option<String>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-/// Fiat currency
-pub struct Fiat {
-    pub name: String,
-    pub symbol: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
