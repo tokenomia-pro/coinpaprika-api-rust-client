@@ -6,8 +6,8 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Serialize, Deserialize)]
 /// Contract information
 pub struct Contract {
-    address: String,
-    id: String,
+    pub address: String,
+    pub id: String,
 
     #[serde(rename = "type")]
     pub contract_type: String,

@@ -1,3 +1,4 @@
+use crate::changelog::GetChangelogRequest;
 use crate::coins::{
     GetCoinEventsRequest, GetCoinExchangesRequest, GetCoinMarketsRequest,
     GetCoinOHLCHistoricalRequest, GetCoinOHLCLastFullDayRequest, GetCoinOHLCTodayRequest,
@@ -275,6 +276,14 @@ impl Client {
     /// [/contracts/{platform_id}](https://api.coinpaprika.com/#tag/Contracts/operation/getContracts)
     pub fn contracts(&self, platform_id: &str) -> GetContractsRequest {
         GetContractsRequest::new(self, platform_id)
+    }
+
+    //
+    // Changelog
+    //
+    /// Call to [/changelog/ids](https://api.coinpaprika.com/#tag/Changelog/operation/getChangelogIDs)
+    pub fn changelog(&self, page: i32) -> GetChangelogRequest {
+        GetChangelogRequest::new(self, page)
     }
 }
 

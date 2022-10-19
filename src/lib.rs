@@ -71,3 +71,6 @@ pub mod tools;
 
 /// Requests for "Contracts" section of the API
 pub mod contracts;
+
+/// Requests for "Changelog" section of the API
+pub mod changelog;
