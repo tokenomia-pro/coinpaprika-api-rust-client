@@ -65,3 +65,6 @@ pub mod tickers;
 
 /// Requests for "Exchanges" section of the API
 pub mod exchanges;
+
+/// Requests for "Tools" section of the API
+pub mod tools;

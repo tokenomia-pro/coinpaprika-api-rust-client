@@ -10,6 +10,7 @@ use crate::key::GetKeyInfoRequest;
 use crate::people::GetPersonRequest;
 use crate::tags::{GetTagRequest, GetTagsRequest};
 use crate::tickers::{GetHistoricalTicksRequest, GetTickerRequest, GetTickersRequest};
+use crate::tools::{GetPriceConversionRequest, GetSearchRequest};
 use reqwest::StatusCode;
 use reqwest_middleware::{
     ClientBuilder, ClientWithMiddleware, Error as ReqwestMiddlewareError, RequestBuilder,
@@ -241,6 +242,24 @@ impl Client {
     /// [/exchanges/{exchange_id}/markets](https://api.coinpaprika.com/#tag/Exchanges/paths/~1exchanges~1%7Bexchange_id%7D~1markets/get)
     pub fn exchange_markets(&self, exchange_id: &str) -> GetExchangeMarketsRequest {
         GetExchangeMarketsRequest::new(self, exchange_id)
+    }
+
+    //
+    // Tools
+    //
+    /// Call to [/search](https://api.coinpaprika.com/#tag/Tools/paths/~1search/get)
+    pub fn search(&self, q: &str) -> GetSearchRequest {
+        GetSearchRequest::new(self, q)
+    }
+
+    /// Call to
+    /// [/price-converter](https://api.coinpaprika.com/#tag/Tools/paths/~1price-converter/get)
+    pub fn price_convert(
+        &self,
+        base_currency_id: &str,
+        quote_currency_id: &str,
+    ) -> GetPriceConversionRequest {
+        GetPriceConversionRequest::new(self, base_currency_id, quote_currency_id)
     }
 }
 
