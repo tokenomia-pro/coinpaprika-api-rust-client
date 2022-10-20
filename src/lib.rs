@@ -36,6 +36,25 @@
 //!
 //! We include examples for each section of the API, located in `/examples` folder.
 //!
+//! If you have an API key, `Client` struct has an additional constructor
+//! `with_key`, that takes API key as an argument:
+//!
+//! ```rust
+//! use coinpaprika_api::client::Client;
+//! use coinpaprika_api::global::Global;
+//! use std::error::Error;
+//!
+//! #[tokio::main]
+//! async fn main() -> Result<(), Box<dyn Error>> {
+//!     let client = Client::with_key("<your-api-key-here>");
+//!
+//!     let global: Global = client.global().send().await?;
+//!     println!("global: {:#?}", global);
+//!
+//!     Ok(())
+//! }
+//! ```
+//!
 //!
 //! ## Supported Endpoints
 //!
